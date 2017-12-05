@@ -23,12 +23,8 @@
 
 <a id="chapter-2"></a>
 ## Схемы
-![SCHEME](https://github.com/AlexGyver/PCdisplay/blob/master/schemes%26PCBs/scheme_fritzing.png)
-![SCHEME](https://github.com/AlexGyver/PCdisplay/blob/master/schemes%26PCBs/scheme_EasyEDA.png)
-### Исходники печаток на EasyEDA
-* [Печатка версия с пинами](https://easyeda.com/editor#id=a6c8d85973e94f4ea4740a2bee59cc46)  
-* [Печатка версия с терминалами](https://easyeda.com/editor#id=0d5864b51bac455bab4618c77582da25)  
-* [Печатка мини версия с терминалами](https://easyeda.com/editor#id=328f6ff272be4d2ea978a43cd159fb93)  
+![SCHEME]()
+![SCHEME]()
 
 <a id="chapter-3"></a>
 ## Материалы и компоненты
