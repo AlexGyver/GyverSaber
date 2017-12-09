@@ -47,6 +47,8 @@
 #define R1 100000           // сопротивление резистора делителя    
 #define R2 51000            // сопротивление резистора делителя
 #define BATTERY_SAFE 1      // не включаться и выключаться при низком заряде АКБ
+
+#define DEBUG 0             // вывод в порт отладочной информации
 // ---------------------------- НАСТРОЙКИ -------------------------------
 
 #define LED_PIN 6           // пин, куда подключен DIN ленты
@@ -154,11 +156,13 @@ char BUFFER[10];
 
 void setup() {
   FastLED.addLeds<WS2811, LED_PIN, GRB>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
-  FastLED.setBrightness(100);
+  FastLED.setBrightness(100);  // яроксть ленты 40%
   setAll(0, 0, 0);             // ставим чёрный цвет ленты
 
   Wire.begin();
   Serial.begin(9600);
+
+  // ---- НАСТРОЙКА ПИНОВ ----
   pinMode(BTN, INPUT_PULLUP);
   pinMode(IMU_GND, OUTPUT);
   pinMode(SD_GND, OUTPUT);
@@ -166,17 +170,29 @@ void setup() {
   digitalWrite(IMU_GND, 0);
   digitalWrite(SD_GND, 0);
   digitalWrite(BTN_LED, 1);
-  randomSeed(analogRead(0));
-  // инициализация и настройка воспроизведения с карты
-  tmrpcm.speakerPin = 9;
-  if (SD.begin(8)) Serial.println("SD ok");
-  tmrpcm.setVolume(5);
-  tmrpcm.quality(1);
+  // ---- НАСТРОЙКА ПИНОВ ----
+
+  randomSeed(analogRead(2));    // берём точку отсчёта для генератора случайных чисел
 
   // инициализация и настройка IMU
   accelgyro.initialize();
   accelgyro.setFullScaleAccelRange(MPU6050_ACCEL_FS_16);
   accelgyro.setFullScaleGyroRange(MPU6050_GYRO_FS_250);
+  if (DEBUG) {
+    if (accelgyro.testConnection()) Serial.println(F("MPU6050 OK"));
+    else Serial.println(F("MPU6050 fail"));
+  }
+
+  // инициализация и настройка воспроизведения с карты
+  tmrpcm.speakerPin = 9;
+  tmrpcm.setVolume(5);
+  tmrpcm.quality(1);
+  if (DEBUG) {
+    if (SD.begin(8)) Serial.println(F("SD OK"));
+    else Serial.println(F("SD fail"));
+  } else {
+    SD.begin(8);
+  }
 
   if ((EEPROM.read(0) >= 0) && (EEPROM.read(0) <= 5)) {  // если был хоть один запуск прошивки
     nowColor = EEPROM.read(0);   // вспоминаем из памяти выбранный цвет
@@ -186,20 +202,24 @@ void setup() {
     EEPROM.write(1, 0);          // обнуляем ячейку
     nowColor = 0;                // цвет нулевой
   }
-  setColor(nowColor);            // устанавливаем цвет
 
-  byte capacity = voltage_measure();   // получить процент заряда аккумулятора
+  setColor(nowColor);                      // устанавливаем цвет клинка
+  byte capacity = voltage_measure();       // получить процент заряда аккумулятора
   capacity = map(capacity, 100, 0, (NUM_LEDS / 2 - 1), 1);  // перевести в длину клинка
+  if (DEBUG) {
+    Serial.print(F("Battery: "));
+    Serial.println(capacity);
+  }
 
-  for (char i = 0; i <= capacity; i++) {          // включить все диоды выбранным цветом
+  for (char i = 0; i <= capacity; i++) {   // отобразить заряд аккумулятора как длину клинка
     setPixel(i, red, green, blue);
     setPixel((NUM_LEDS - 1 - i), red, green, blue);
     FastLED.show();
     delay(25);
   }
-  delay(1000);                 // секунда для отображения заряда акума
-  setAll(0, 0, 0);             // показываем чёрный цвет ленты
-  FastLED.setBrightness(BRIGHTNESS); // яркость
+  delay(1000);                         // секунда для отображения заряда акума
+  setAll(0, 0, 0);                     // показываем чёрный цвет ленты
+  FastLED.setBrightness(BRIGHTNESS);   // возвращаем яркость
 }
 
 void loop() {
@@ -215,6 +235,7 @@ void loop() {
 void btnTick() {
   btnState = !digitalRead(BTN);    // если кнопка нажата
   if (btnState && !btn_flag) {
+    if (DEBUG) Serial.println(F("BTN PRESS"));
     btn_flag = 1;
     btn_counter++;                 // прибавить счётчик нажатий
     btn_timer = millis();
@@ -243,10 +264,10 @@ void btnTick() {
         HUMmode = !HUMmode;
         if (HUMmode) {
           noToneAC();                       // вырубить трещалку
-          tmrpcm.play("HUM.wav");
+          tmrpcm.play("HUM.wav");           // грать гудение
         } else {
           tmrpcm.disable();                 // выключаем звук
-          toneAC(freq_f);
+          toneAC(freq_f);                   // трещать
         }
         eeprom_flag = 1;                    // разрешить запись память
       }
@@ -259,6 +280,7 @@ void on_off_sound() {                // блок вкл/выкл меча со �
   if (ls_chg_state) {                // если есть запрос на изменение состояния меча
     if (!ls_state) {                 // если меч выключен
       if (voltage_measure() > 10 || !BATTERY_SAFE) {
+        if (DEBUG) Serial.println(F("SABER ON"));
         tmrpcm.play("ON.wav");         // воспроизвести звук включения
         delay(200);                    // ждём воспроизведение
         light_up();                    // лента включается
@@ -266,13 +288,14 @@ void on_off_sound() {                // блок вкл/выкл меча со �
         bzzz_flag = 1;                 // разрешаем трещалку
         ls_state = true;               // запомнить, что меч включен
         if (HUMmode) {
-          noToneAC();                       // вырубить трещалку
-          tmrpcm.play("HUM.wav");
+          noToneAC();                  // вырубить трещалку
+          tmrpcm.play("HUM.wav");      // гудеть
         } else {
-          tmrpcm.disable();                 // выключаем звук
-          toneAC(freq_f);
+          tmrpcm.disable();            // выключаем звук
+          toneAC(freq_f);              // трещать
         }
       } else {
+        if (DEBUG) Serial.println(F("LOW VOLTAGE!"));
         for (int i = 0; i < 5; i++) {
           digitalWrite(BTN_LED, 0);
           delay(400);
@@ -288,6 +311,7 @@ void on_off_sound() {                // блок вкл/выкл меча со �
       light_down();                  // лента выключается
       delay(300);                    // ждём воспроизведение
       tmrpcm.disable();              // выключаем звук
+      if (DEBUG) Serial.println(F("SABER OFF"));
       ls_state = false;              // запомнить, что меч выключен
       if (eeprom_flag) {             // если была смена цвета
         eeprom_flag = 0;
@@ -300,14 +324,14 @@ void on_off_sound() {                // блок вкл/выкл меча со �
 
   if (((millis() - humTimer) > 9000) && bzzz_flag && HUMmode) {   // если настало время трещать и разрешено трещать
     tmrpcm.play("HUM.wav");
-    humTimer = millis();                            // сбросить таймер
+    humTimer = millis();                                          // сбросить таймер
     swing_flag = 1;
     strike_flag = 0;
   }
   long delta = millis() - bzzTimer;
   if ((delta > 3) && bzzz_flag && !HUMmode) {   // если настало время трещать и разрешено трещать
     if (strike_flag) {
-      tmrpcm.disable();                               // выключить звук
+      tmrpcm.disable();                             // выключить звук
       strike_flag = 0;
     }
     toneAC(freq_f);                                 // трещать
@@ -388,6 +412,7 @@ void getFreq() {
   if (ls_state) {                                               // если меч включен
     if (millis() - mpuTimer > 500) {                            // каждые полмиллисекунды
       accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);       // получить показания с IMU
+
       // найти абсолютное значение, разделить на 100
       gyroX = abs(gx / 100);
       gyroY = abs(gy / 100);
@@ -396,6 +421,7 @@ void getFreq() {
       accelY = abs(ay / 100);
       accelZ = abs(az / 100);
 
+      // найти среднеквадратичное (сумма трёх векторов в общем)
       ACC = sq((long)accelX) + sq((long)accelY) + sq((long)accelZ);
       ACC = sqrt(ACC);
       GYR = sq((long)gyroX) + sq((long)gyroY) + sq((long)gyroZ);
@@ -419,12 +445,14 @@ void getFreq() {
   }
 }
 
+// функция выбора цвета одного светодиода
 void setPixel(int Pixel, byte red, byte green, byte blue) {
   leds[Pixel].r = red;
   leds[Pixel].g = green;
   leds[Pixel].b = blue;
 }
 
+// функция заливки всех светодиодов выбранным цветом
 void setAll(byte red, byte green, byte blue) {
   for (int i = 0; i < NUM_LEDS; i++ ) {
     setPixel(i, red, green, blue);
@@ -432,6 +460,7 @@ void setAll(byte red, byte green, byte blue) {
   FastLED.show();
 }
 
+// плавное включение меча
 void light_up() {
   for (char i = 0; i <= (NUM_LEDS / 2 - 1); i++) {          // включить все диоды выбранным цветом
     setPixel(i, red, green, blue);
@@ -440,6 +469,8 @@ void light_up() {
     delay(25);
   }
 }
+
+// плавное выключение меча
 void light_down() {
   for (char i = (NUM_LEDS / 2 - 1); i >= 0; i--) {      // выключить все диоды
     setPixel(i, 0, 0, 0);
@@ -448,12 +479,15 @@ void light_down() {
     delay(25);
   }
 }
+
+// моргание при ударе
 void strike_flash() {
   setAll(255, 255, 255);             // цвет клинка белым
   delay(FLASH_DELAY);                // ждать
   setAll(red, blue, green);          // цвет клинка старым цветом
 }
 
+// выбор цвета
 void setColor(byte color) {
   switch (color) {
     // 0 - красный, 1 - синий, 2 - зелёный, 3 - розовый, 4 - жёлтый, 5 - голубой не хотим играть с тобой
@@ -490,6 +524,7 @@ void setColor(byte color) {
   }
 }
 
+// проверка акума
 void batteryTick() {
   if (millis() - battery_timer > 30000 && ls_state && BATTERY_SAFE) {
     if (voltage_measure() < 15) {
