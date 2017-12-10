@@ -55,6 +55,21 @@
 * Адресная лента. Чип WS2811, напряжение 12 Вольт. Берём 2 метра ленты, на **белой подложке, без защиты от влаги, 60 светодиодов на метр**
 http://ali.pub/23csyd  http://ali.pub/23cszc  http://ali.pub/23cszq
 * Кнопочки с подсветкой. **Берём версию 5 Вольт** http://ali.pub/23ct29
+* Акселерометр-гироскоп http://ali.pub/23mryw  http://ali.pub/23mst1
+* Дешёвые карты памяти http://ali.pub/23msne  http://ali.pub/23msqp
+* Модуль карты памяти мини http://ali.pub/23ms27  http://ali.pub/23ms5b
+* Или такой http://ali.pub/23ms11
+* Акумы с защитой http://ali.pub/23moiu  http://ali.pub/23moke  http://ali.pub/23mol6
+* Понижайка http://ali.pub/23mpex  http://ali.pub/23mpfi  http://ali.pub/23mph9
+* Усилитель http://ali.pub/23mp6d  http://ali.pub/23mp75  http://ali.pub/23mp7q
+* Динамик http://ali.pub/23mq8h  http://ali.pub/23mq9g  http://ali.pub/23mqc6
+* Набор резисторов http://ali.pub/23mqei  http://ali.pub/23mqfo
+* Кнопка питания http://ali.pub/23mtiw
+* Зарядное гнездо http://ali.pub/23mtf0  http://ali.pub/23mt69
+* Зарядник CC CV для 3-х банок http://ali.pub/23mt8s  http://ali.pub/23mt9d  http://ali.pub/23mt9k
+* Макетная плата http://ali.pub/23mrwy  
+* **РЕЗИСТОРЫ И КНОПКИ МОЖНО НАЙТИ В ЛЮБОМ МАГАЗИНЕ РАДИОТОВАРОВ ИЛИ НА РАДИОРЫНКЕ**
+* Труба http://www.energoplast.ru/
 
 ## Вам скорее всего пригодится
 * [Всё для пайки (паяльники и примочки)](http://alexgyver.ru/all-for-soldering/)
