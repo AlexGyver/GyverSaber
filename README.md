@@ -51,25 +51,23 @@
 
 <a id="chapter-3"></a>
 ## Материалы и компоненты
-* Arduino NANO http://ali.pub/20o35g  http://ali.pub/20o36t
-* Адресная лента. Чип WS2811, напряжение 12 Вольт. Берём **2 метра ленты (1 метр + 1 метр), на белой подложке, без защиты от влаги (IP30), 60 светодиодов на метр**
-http://ali.pub/23csyd  http://ali.pub/23cszc  http://ali.pub/23cszq
-* Кнопочки с подсветкой. **Берём версию 5 Вольт** http://ali.pub/23ct29
-* Акселерометр-гироскоп http://ali.pub/23mryw  http://ali.pub/23mst1
-* Дешёвые карты памяти http://ali.pub/23msne  http://ali.pub/23msqp
-* Модуль карты памяти мини http://ali.pub/23ms27  http://ali.pub/23ms5b
-* Или такой http://ali.pub/23ms11
-* Акумы с защитой http://ali.pub/23moiu  http://ali.pub/23moke  http://ali.pub/23mol6
-* Понижайка http://ali.pub/23mpex  http://ali.pub/23mpfi  http://ali.pub/23mph9
-* Усилитель http://ali.pub/23mp6d  http://ali.pub/23mp75  http://ali.pub/23mp7q
-* Динамик http://ali.pub/23mq8h  http://ali.pub/23mq9g  http://ali.pub/23mqc6
-* Набор резисторов http://ali.pub/23mqei  http://ali.pub/23mqfo
-* Кнопка питания http://ali.pub/23mtiw
-* Зарядное гнездо http://ali.pub/23mtf0  http://ali.pub/23mt69
-* Зарядник CC CV для 3-х банок http://ali.pub/23mt8s  http://ali.pub/23mt9d  http://ali.pub/23mt9k
-* Макетная плата http://ali.pub/23mrwy  
-* **РЕЗИСТОРЫ И КНОПКИ МОЖНО НАЙТИ В ЛЮБОМ МАГАЗИНЕ РАДИОТОВАРОВ ИЛИ НА РАДИОРЫНКЕ**
-* Труба http://www.energoplast.ru/
+* Arduino NANO https://ali.ski/jmFH9_ https://ali.ski/5OBVTQ
+* Адресная лента. Чип WS2811, напряжение 12 Вольт. Берём 2 метра ленты, на белой подложке, без защиты от влаги, 60 светодиодов на метр https://ali.ski/NMjk8 https://ali.ski/zW95D
+* Кнопочки с подсветкой. Берём версию 5 Вольт https://ali.ski/Mwcxt
+* Акселерометр-гироскоп https://ali.ski/v5KZLL https://ali.ski/uXu5vi
+* Дешёвые карты памяти https://ali.ski/GxgI4D
+* Модуль карты памяти мини https://ali.ski/JHIePz https://ali.ski/KsPKO
+* Или такой https://ali.ski/WKZdDk
+* Акумы с защитой https://ali.ski/XBqThJ https://ali.ski/lx5do https://ali.ski/3DZON9
+* Понижайка https://ali.ski/Gu17D https://ali.ski/LGc7S https://ali.ski/AZ7FEd
+* Усилитель https://ali.ski/w3a6s https://ali.ski/UJQHAm https://ali.ski/9chyq
+* Динамик https://ali.ski/fkf3b5 https://ali.ski/f3bznw https://ali.ski/NGb4L
+* Набор резисторов https://ali.ski/DsRXU https://ali.ski/0QeVi
+* Кнопка питания https://ali.ski/ADn0zC
+* Зарядное гнездо https://ali.ski/-02oW https://ali.ski/-gRAOg
+* Зарядник CC CV для 3-х банок https://ali.ski/uPeDvv https://ali.ski/QY79Lj https://ali.ski/xxHSRf
+* Макетная плата https://ali.ski/XTO9n
+* РЕЗИСТОРЫ И КНОПКИ МОЖНО НАЙТИ В ЛЮБОМ МАГАЗИНЕ РАДИОТОВАРОВ ИЛИ НА РАДИОРЫНКЕ
 
 ## Вам скорее всего пригодится
 * [Всё для пайки (паяльники и примочки)](http://alexgyver.ru/all-for-soldering/)
